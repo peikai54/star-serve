@@ -1,0 +1,43 @@
+package controller
+
+import (
+	"fmt"
+	"net/http"
+	"serve/dto"
+	"serve/server"
+
+	"github.com/gin-gonic/gin"
+)
+
+func CreateProject(c *gin.Context) {
+	var data dto.AddProjectReq
+	var err error
+
+	err = c.Bind(&data)
+
+	if err != nil {
+		fmt.Println(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"message": "入参错误"})
+		return
+	}
+
+	err = server.CreateProject(c, data)
+
+	if err != nil {
+		fmt.Println(err.Error())
+		c.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{"message": "创建成功"})
+}
+
+func GetProjectList(c *gin.Context) {
+	list, err := server.GetProjectList(c)
+	if err != nil {
+		fmt.Println(err.Error())
+		c.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+	c.JSON(200, gin.H{"list": list})
+}
