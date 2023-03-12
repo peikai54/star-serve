@@ -16,3 +16,16 @@ func Login(c *gin.Context, data *dto.LoginReq) (string, error) {
 	}
 	return token, err
 }
+
+func GetUserInfo(c *gin.Context, token string) (dto.UserInfoResp, error) {
+	config, err := utils.ParseToken(token)
+	var userInfo = dto.UserInfoResp{}
+	if err != nil {
+		return userInfo, err
+	}
+	if config.Username == "游客测试账号" {
+		userInfo.UserName = config.Username
+		userInfo.UserId = 2
+	}
+	return userInfo, err
+}
