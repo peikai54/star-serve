@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"serve/dto"
 	"time"
 )
 
@@ -26,8 +27,25 @@ func CreateProject(project ProjectModel) error {
 	return err
 }
 
-func ProjectList() ([]ProjectModel, error) {
+func ProjectList(data dto.ProjectListReq) ([]ProjectModel, error) {
 	projectList := []ProjectModel{}
-	result := DbConnect.Find(&projectList)
+
+	query := DbConnect
+
+	if data.Name != "" {
+		query = query.Where("project_name LIKE BINARY ?", "%"+data.Name+"%")
+	}
+
+	if data.Type > 0 {
+		query = query.Where("project_type = ?", data.Type)
+	}
+
+	if data.CreateAtEnd > 0 && data.CreateAtStart > 0 {
+		create_at := time.Unix(data.CreateAtStart/1000, 0)
+		end_at := time.Unix(data.CreateAtEnd/1000, 0)
+		query = query.Where("create_at BETWEEN ? AND ?", create_at, end_at)
+	}
+
+	result := query.Find(&projectList)
 	return projectList, result.Error
 }

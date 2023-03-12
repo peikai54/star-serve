@@ -17,8 +17,14 @@ func (UserModel) TableName() string {
 	return "user"
 }
 
-func BatchGetUserByIds(ids []int64) ([]UserModel, error) {
+func BatchGetUserByIds(ids []int64, creator string) ([]UserModel, error) {
 	var userList = []UserModel{}
-	result := DbConnect.Where(ids).Find(&userList)
+	query := DbConnect.Where(ids)
+
+	if creator != "" {
+		query = query.Where("user_name LIKE BINARY ?", "%"+creator+"%")
+	}
+
+	result := query.Find(&userList)
 	return userList, result.Error
 }

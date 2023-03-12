@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func CrosHandler() gin.HandlerFunc {
@@ -39,10 +40,9 @@ func CrosHandler() gin.HandlerFunc {
 
 func main() {
 	r := gin.Default()
-
 	dsn := "pkforonly:a4c390a11680bdaf@tcp(mysql.sqlpub.com:3306)/pkforonly?charset=utf8mb4&parseTime=True&loc=Local"
 	var err error
-	model.DbConnect, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	model.DbConnect, err = gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
 
 	if err != nil {
 		fmt.Println(err.Error())

@@ -18,8 +18,8 @@ func CreateProject(c *gin.Context, data dto.AddProjectReq) error {
 	return err
 }
 
-func GetProjectList(c *gin.Context) ([]dto.ProjectListResp, error) {
-	targets, err := model.ProjectList()
+func GetProjectList(c *gin.Context, data dto.ProjectListReq) ([]dto.ProjectListResp, error) {
+	targets, err := model.ProjectList(data)
 
 	if err != nil {
 		return nil, err
@@ -30,25 +30,26 @@ func GetProjectList(c *gin.Context) ([]dto.ProjectListResp, error) {
 		ids = append(ids, target.Creator)
 	}
 
-	users, err2 := model.BatchGetUserByIds(ids)
+	users, err2 := model.BatchGetUserByIds(ids, data.Creator)
 
 	if err2 != nil {
 		return nil, err2
 	}
+
 	for _, target := range targets {
 		item := dto.ProjectListResp{
 			ProjectName: target.ProjectName,
 			ProjectType: target.ProjectType,
 			ProjectId:   target.ProjectId,
 			CreatOrId:   target.Creator,
-			CreateAt:    target.CreateAt.Format("2006-06-03 01:02:03"),
+			CreateAt:    target.CreateAt.Format("2006-01-02 15:04"),
 		}
 		for _, user := range users {
 			if user.UserId == item.CreatOrId {
 				item.CreatOrName = user.UserName
+				list = append(list, item)
 			}
 		}
-		list = append(list, item)
 	}
 
 	return list, err

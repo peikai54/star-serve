@@ -23,5 +23,7 @@ func ResignRouter(r *gin.Engine) {
 
 	r.POST("/add-project", controller.CreateProject)
 
-	r.GET("projects", controller.GetProjectList)
+	r.GET("/projects", controller.GetProjectList)
+
+	r.POST("/login", controller.Login)
 }

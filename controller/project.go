@@ -33,7 +33,18 @@ func CreateProject(c *gin.Context) {
 }
 
 func GetProjectList(c *gin.Context) {
-	list, err := server.GetProjectList(c)
+	var data dto.ProjectListReq
+	var list []dto.ProjectListResp
+	var err error
+
+	err = c.ShouldBindQuery(&data)
+
+	if err != nil {
+		fmt.Println(err.Error())
+		c.JSON(400, gin.H{"message": "入参错误"})
+		return
+	}
+	list, err = server.GetProjectList(c, data)
 	if err != nil {
 		fmt.Println(err.Error())
 		c.JSON(500, gin.H{"message": err.Error()})
