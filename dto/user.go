@@ -9,3 +9,7 @@ type UserInfoResp struct {
 	UserName string `json:"user_name"`
 	UserId   int64  `json:"user_id"`
 }
+
+type UserInfoReq struct {
+	Token string `form:"token" binding:"required"`
+}

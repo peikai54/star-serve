@@ -20,16 +20,21 @@ func Login(c *gin.Context) {
 		return
 	}
 	c.SetCookie("token", token, 60*60*24, "/", "localhost", false, false)
-	c.JSON(200, gin.H{"message": "登录成功"})
+	c.JSON(200, gin.H{"message": "登录成功", "token": token})
 }
 
 func GetUserInfo(c *gin.Context) {
-	token, err := c.Cookie("token")
+
+	var data dto.UserInfoReq
+
+	err := c.ShouldBindQuery(&data)
+
 	if err != nil {
 		c.JSON(403, gin.H{"message": "暂无权限"})
 		return
 	}
-	userInfo, err2 := server.GetUserInfo(c, token)
+
+	userInfo, err2 := server.GetUserInfo(c, data.Token)
 	if err2 != nil {
 		c.JSON(400, gin.H{"message": err2.Error()})
 		return
