@@ -27,7 +27,6 @@ func AddTarget(c *gin.Context, data dto.AddTargetReq) error {
 func GetTargetList(c *gin.Context) ([]dto.TargetListResp, error) {
 	targets, err := model.TargetList()
 	var list = []dto.TargetListResp{}
-
 	for _, target := range targets {
 		var item = dto.TargetListResp{
 			Name:       target.Name,
