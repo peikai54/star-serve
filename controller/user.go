@@ -19,7 +19,7 @@ func Login(c *gin.Context) {
 		c.JSON(500, gin.H{"message": err2.Error()})
 		return
 	}
-	c.SetCookie("token", token, 60*60*24, "/", "localhost", false, false)
+	c.SetCookie("token", token, 3600, "/", "", false, false)
 	c.JSON(200, gin.H{"message": "登录成功", "token": token})
 }
 
