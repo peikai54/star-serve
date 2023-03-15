@@ -28,4 +28,6 @@ func ResignRouter(r *gin.Engine) {
 	r.POST("/login", controller.Login)
 
 	r.GET("/user-info", controller.GetUserInfo)
+
+	r.POST("/add-story", controller.CreateStory)
 }
