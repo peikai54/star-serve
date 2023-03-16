@@ -46,6 +46,10 @@ func ProjectList(data dto.ProjectListReq) ([]ProjectModel, error) {
 		query = query.Where("create_at BETWEEN ? AND ?", create_at, end_at)
 	}
 
+	if data.Ids != nil {
+		query = query.Where("project_id in ?", data.Ids)
+	}
+
 	result := query.Find(&projectList)
 	return projectList, result.Error
 }

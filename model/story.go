@@ -19,8 +19,14 @@ func (StoryModel) TableName() string {
 	return "story"
 }
 
-func StoryList(data dto.StoryListReq) {
+func StoryList(data dto.StoryListReq) ([]StoryModel, error) {
+	storyList := []StoryModel{}
 
+	query := DbConnect
+
+	result := query.Find(&storyList)
+
+	return storyList, result.Error
 }
 
 // 创建需求
@@ -58,5 +64,4 @@ func CreateStoryWithHandler(story StoryModel, handlerList []int64) error {
 	tx.Commit()
 
 	return err
-
 }

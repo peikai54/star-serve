@@ -7,11 +7,12 @@ type AddProjectReq struct {
 }
 
 type ProjectListReq struct {
-	Name          string `form:"name"`
-	Type          int64  `form:"type"`
-	Creator       string `form:"creator"`
-	CreateAtStart int64  `form:"start_at"`
-	CreateAtEnd   int64  `form:"end_at"`
+	Ids           []int64 `form:"id"`
+	Name          string  `form:"name"`
+	Type          int64   `form:"type"`
+	Creator       string  `form:"creator"`
+	CreateAtStart int64   `form:"start_at"`
+	CreateAtEnd   int64   `form:"end_at"`
 }
 
 type ProjectListResp struct {
