@@ -30,7 +30,7 @@ func StoryList(c *gin.Context, data dto.StoryListReq) ([]dto.StoryListResp, erro
 	var tempProjectList = []model.ProjectModel{}
 	var tempCreatorList = []model.UserModel{}
 	var tempHandlerList = []dto.StoryHandlerInfo{}
-	var stortList []dto.StoryListResp
+	var storyList []dto.StoryListResp
 	var err error
 
 	tempList, err = model.StoryList(data)
@@ -58,7 +58,7 @@ func StoryList(c *gin.Context, data dto.StoryListReq) ([]dto.StoryListResp, erro
 	}
 
 	// 获取用户列表
-	tempCreatorList, err = model.BatchGetUserByIds(createdIds, "")
+	tempCreatorList, err = model.BatchGetUserByIds(createdIds, data.CreatedBy)
 
 	if err != nil {
 		return nil, err
@@ -68,6 +68,8 @@ func StoryList(c *gin.Context, data dto.StoryListReq) ([]dto.StoryListResp, erro
 
 	for _, item := range tempList {
 
+		var isAppend bool = false
+
 		// 数据整合，添加项目信息
 		var projectInfo = dto.ProjectInfo{ProjectId: item.ProjectId}
 		for _, project := range tempProjectList {
@@ -76,10 +78,11 @@ func StoryList(c *gin.Context, data dto.StoryListReq) ([]dto.StoryListResp, erro
 			}
 		}
 
-		// 数据整合，添加用户信息
+		// 数据整合，添加创建人信息
 		var creatorData = dto.UserInfo{UserId: item.CreatedBy}
 		for _, creator := range tempCreatorList {
-			if creatorData.UserId == item.CreatedBy {
+			if creator.UserId == item.CreatedBy {
+				isAppend = true
 				creatorData.Name = creator.UserName
 			}
 		}
@@ -100,9 +103,31 @@ func StoryList(c *gin.Context, data dto.StoryListReq) ([]dto.StoryListResp, erro
 			CreatedBy:   creatorData,
 			Handler:     handlerList,
 		}
-		stortList = append(stortList, story)
+
+		if isAppend {
+			storyList = append(storyList, story)
+		}
 	}
 
-	return stortList, err
+	// 根据处理人进行过滤
+	if data.Handler > 0 {
+		for index, story := range storyList {
+			var couldFind bool = false
+			for _, item := range story.Handler {
+				if item.UserId == data.Handler {
+					couldFind = true
+				}
+			}
+			if !couldFind {
+				if len(storyList) == 1 {
+					storyList = []dto.StoryListResp{}
+				} else {
+					storyList = storyList[:index+copy(storyList[index:], storyList[index+1:])]
+				}
+			}
+		}
+	}
+
+	return storyList, err
 
 }

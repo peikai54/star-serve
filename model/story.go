@@ -24,6 +24,18 @@ func StoryList(data dto.StoryListReq) ([]StoryModel, error) {
 
 	query := DbConnect
 
+	if data.StoryName != "" {
+		query = query.Where("story_name  LIKE BINARY ?", "%"+data.StoryName+"%")
+	}
+
+	if data.Status != "" {
+		query = query.Where("status  LIKE BINARY ?", "%"+data.Status+"%")
+	}
+
+	if data.ProjectId > 0 {
+		query = query.Where("project_id = ?", data.ProjectId)
+	}
+
 	result := query.Find(&storyList)
 
 	return storyList, result.Error

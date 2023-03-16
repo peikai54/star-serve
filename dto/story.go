@@ -2,7 +2,7 @@ package dto
 
 type StoryListReq struct {
 	StoryName string `form:"story_name"`
-	Handler   string `form:"handler"`
+	Handler   int64  `form:"handler"`
 	CreatedBy string `form:"created_by"`
 	Status    string `form:"status"`
 	ProjectId int64  `form:"project_id"`
