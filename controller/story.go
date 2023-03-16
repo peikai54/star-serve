@@ -24,3 +24,7 @@ func CreateStory(c *gin.Context) {
 	}
 	c.JSON(200, gin.H{"message": "新建成功"})
 }
+
+func StoryList(c *gin.Context) {
+
+}

@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type StroyModel struct {
+type StoryModel struct {
 	StoryId   int64 `gorm:"primaryKey"`
 	ProjectId int64
 	StoryName string
@@ -15,7 +15,7 @@ type StroyModel struct {
 	// Handler   int64
 }
 
-func (StroyModel) TableName() string {
+func (StoryModel) TableName() string {
 	return "story"
 }
 
@@ -24,30 +24,39 @@ func StoryList(data dto.StoryListReq) {
 }
 
 // 创建需求
-func CreateStory(story StroyModel) error {
+func CreateStory(story StoryModel) error {
 	err := DbConnect.Create(&story).Error
 	return err
 }
 
-// func StorytList(data dto.ProjectListReq) ([]ProjectModel, error) {
-// 	projectList := []StroyModel{}
+func CreateStoryWithHandler(story StoryModel, handlerList []int64) error {
+	// 创建事务
+	tx := DbConnect.Begin()
+	var err error = nil
 
-// 	query := DbConnect
+	err = tx.Create(&story).Error
 
-// 	if data.Name != "" {
-// 		query = query.Where("project_name LIKE BINARY ?", "%"+data.Name+"%")
-// 	}
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
 
-// 	if data.Type > 0 {
-// 		query = query.Where("project_type = ?", data.Type)
-// 	}
+	var storyHandler = []StroyHandlerModel{}
 
-// 	if data.CreateAtEnd > 0 && data.CreateAtStart > 0 {
-// 		create_at := time.Unix(data.CreateAtStart/1000, 0)
-// 		end_at := time.Unix(data.CreateAtEnd/1000, 0)
-// 		query = query.Where("create_at BETWEEN ? AND ?", create_at, end_at)
-// 	}
+	for _, id := range handlerList {
+		item := StroyHandlerModel{Handler: id, StoryId: story.StoryId}
+		storyHandler = append(storyHandler, item)
+	}
 
-// 	result := query.Find(&projectList)
-// 	return projectList, result.Error
-// }
+	err = tx.CreateInBatches(storyHandler, 100).Error
+
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+
+	return err
+
+}

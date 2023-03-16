@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"serve/model"
 	"serve/router"
-	"serve/utils"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
@@ -49,8 +48,6 @@ func main() {
 	} else {
 		fmt.Println("数据库连接成功")
 	}
-
-	utils.GetTodayEnd()
 
 	r.Use(CrosHandler())
 
