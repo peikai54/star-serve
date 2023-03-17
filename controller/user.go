@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"serve/dto"
 	"serve/server"
 
@@ -40,4 +41,14 @@ func GetUserInfo(c *gin.Context) {
 		return
 	}
 	c.JSON(200, gin.H{"info": userInfo})
+}
+
+func GetUserList(c *gin.Context) {
+	result, err := server.GetUserList(c)
+	if err != nil {
+		fmt.Println(err.Error())
+		c.JSON(500, "获取用户列表错误")
+		return
+	}
+	c.JSON(200, gin.H{"list": result})
 }

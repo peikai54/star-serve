@@ -31,6 +31,12 @@ func ResignRouter(r *gin.Engine) {
 
 	StoryRoute(r)
 
+	UserRoute(r)
+}
+
+func UserRoute(r *gin.Engine) {
+	user := r.Group("/user")
+	user.GET("/list", controller.GetUserList)
 }
 
 func StoryRoute(r *gin.Engine) {
@@ -38,4 +44,5 @@ func StoryRoute(r *gin.Engine) {
 
 	story.POST("/add", controller.CreateStory)
 	story.GET("/list", controller.StoryList)
+	story.GET("/status", controller.GetStatusList)
 }

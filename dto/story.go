@@ -40,3 +40,7 @@ type StoryHandlerInfo struct {
 	UserId  int64  `json:"user_id"`
 	StoryId int64  `json:"story_id"`
 }
+
+type StatusInfo struct {
+	StatusName string `json:"status_name"`
+}

@@ -2,6 +2,7 @@ package server
 
 import (
 	"serve/dto"
+	"serve/model"
 	"serve/utils"
 
 	"github.com/gin-gonic/gin"
@@ -28,4 +29,14 @@ func GetUserInfo(c *gin.Context, token string) (dto.UserInfoResp, error) {
 		userInfo.UserId = 2
 	}
 	return userInfo, err
+}
+
+func GetUserList(c *gin.Context) ([]dto.UserInfoResp, error) {
+	var result = []dto.UserInfoResp{}
+	userList, err := model.GetUserList()
+	for _, user := range userList {
+		item := dto.UserInfoResp{UserName: user.UserName, UserId: user.UserId}
+		result = append(result, item)
+	}
+	return result, err
 }

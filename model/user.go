@@ -28,3 +28,9 @@ func BatchGetUserByIds(ids []int64, creator string) ([]UserModel, error) {
 	result := query.Find(&userList)
 	return userList, result.Error
 }
+
+func GetUserList() ([]UserModel, error) {
+	var userList = []UserModel{}
+	err := DbConnect.Find(&userList).Error
+	return userList, err
+}

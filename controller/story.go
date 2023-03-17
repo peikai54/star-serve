@@ -42,3 +42,13 @@ func StoryList(c *gin.Context) {
 	}
 	c.JSON(200, gin.H{"list": storyList})
 }
+
+func GetStatusList(c *gin.Context) {
+	result, err := server.GetStatusList(c)
+	if err != nil {
+		fmt.Println(err.Error())
+		c.JSON(400, gin.H{"message": "需求状态获取错误"})
+		return
+	}
+	c.JSON(200, gin.H{"list": result})
+}
