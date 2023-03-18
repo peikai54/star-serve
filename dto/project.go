@@ -23,3 +23,7 @@ type ProjectListResp struct {
 	CreatOrName string `json:"creator_name"`
 	CreateAt    string `json:"create_at"`
 }
+
+type DeletedProject struct {
+	ProjectId int64 `json:"project_id"`
+}

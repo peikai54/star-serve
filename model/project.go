@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"serve/dto"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type ProjectModel struct {
@@ -12,10 +14,16 @@ type ProjectModel struct {
 	Creator     int64
 	CreateAt    time.Time `gorm:"autoCreateTime"`
 	ProjectType int64
+	IsDeleted   int64
 }
 
 func (ProjectModel) TableName() string {
 	return "project"
+}
+
+// 删除项目
+func DeleteProject(tx *gorm.DB, ProjectId int64) error {
+	return tx.Model(&ProjectModel{}).Where("project_id = ?", ProjectId).Update("is_deleted", 1).Error
 }
 
 // 创建项目
@@ -49,6 +57,8 @@ func ProjectList(data dto.ProjectListReq) ([]ProjectModel, error) {
 	if data.Ids != nil {
 		query = query.Where("project_id in ?", data.Ids)
 	}
+
+	query = query.Where("is_deleted = ?", 0)
 
 	result := query.Find(&projectList)
 	return projectList, result.Error

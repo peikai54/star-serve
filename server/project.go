@@ -54,3 +54,14 @@ func GetProjectList(c *gin.Context, data dto.ProjectListReq) ([]dto.ProjectListR
 
 	return list, err
 }
+
+func DeletedProject(c *gin.Context, data dto.DeletedProject) error {
+	tx := model.DbConnect.Begin()
+	err := model.DeleteProject(tx, data.ProjectId)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return err
+}

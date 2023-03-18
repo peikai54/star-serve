@@ -52,3 +52,20 @@ func GetProjectList(c *gin.Context) {
 	}
 	c.JSON(200, gin.H{"list": list})
 }
+
+func DeleteProject(c *gin.Context) {
+	var data dto.DeletedProject
+	err := c.ShouldBindJSON(&data)
+	if err != nil {
+		fmt.Println(err.Error())
+		c.JSON(400, gin.H{"message": "入参错误"})
+		return
+	}
+	err = server.DeletedProject(c, data)
+	if err != nil {
+		fmt.Println(err.Error())
+		c.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+	c.JSON(200, gin.H{"message": "删除成功"})
+}

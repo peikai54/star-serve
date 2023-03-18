@@ -34,6 +34,14 @@ func ResignRouter(r *gin.Engine) {
 	UserRoute(r)
 
 	StaticConfig(r)
+
+	ProjectRoute(r)
+}
+
+func ProjectRoute(r *gin.Engine) {
+	project := r.Group("/project")
+
+	project.POST("/deleted", controller.DeleteProject)
 }
 
 func UserRoute(r *gin.Engine) {
