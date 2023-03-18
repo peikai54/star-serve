@@ -52,8 +52,19 @@ func StoryRoute(r *gin.Engine) {
 
 func StaticConfig(r *gin.Engine) {
 
-	// static := r.Group("/static")
+	static := r.Group("/static")
 
-	// r.Static("/static", "/static")
-	r.StaticFile("/static/resume", "static/resume.pdf")
+	static.StaticFile("/resume", "static/.pdf")
+
+	static.StaticFile("/express", "static/express.zip")
+
+	static.StaticFile("/vue-template", "static/vue-template.zip")
+
+	static.StaticFile("/react-js", "static/react-js.zip")
+
+	static.StaticFile("/react-ts", "static/react-ts.zip")
+
+	static.StaticFile("/gin-rest", "static/gin-rest.zip")
+
+	static.StaticFile("/koa2", "static/koa2.zip")
 }
