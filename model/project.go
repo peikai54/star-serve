@@ -63,3 +63,16 @@ func ProjectList(data dto.ProjectListReq) ([]ProjectModel, error) {
 	result := query.Find(&projectList)
 	return projectList, result.Error
 }
+
+type ProjectModelRepo interface {
+	UpdateProject(tx *gorm.DB, data dto.UpdateProjectReq) error
+}
+
+type ProjectModelStruct struct{}
+
+func (ProjectModelStruct) UpdateProject(tx *gorm.DB, data dto.UpdateProjectReq) error {
+	return tx.Model(&ProjectModel{}).Where("project_id = ?", data.ProjectId).
+		Updates(ProjectModel{ProjectName: data.ProjectName, ProjectType: data.ProjectType}).Error
+}
+
+var ProjectModelSet = ProjectModelStruct{}

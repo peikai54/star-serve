@@ -25,5 +25,11 @@ type ProjectListResp struct {
 }
 
 type DeletedProject struct {
-	ProjectId int64 `json:"project_id"`
+	ProjectId int64 `json:"project_id" binding:"required"`
+}
+
+type UpdateProjectReq struct {
+	ProjectId   int64  `json:"project_id" binding:"required"`
+	ProjectName string `json:"project_name"`
+	ProjectType int64  `json:"project_type"`
 }

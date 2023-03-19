@@ -42,6 +42,7 @@ func ProjectRoute(r *gin.Engine) {
 	project := r.Group("/project")
 
 	project.POST("/deleted", controller.DeleteProject)
+	project.POST("/update", controller.UpdateProject)
 }
 
 func UserRoute(r *gin.Engine) {

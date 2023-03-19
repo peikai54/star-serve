@@ -65,3 +65,8 @@ func DeletedProject(c *gin.Context, data dto.DeletedProject) error {
 	tx.Commit()
 	return err
 }
+
+func UpdateProject(c *gin.Context, data dto.UpdateProjectReq) error {
+	err := model.ProjectModelSet.UpdateProject(model.DbConnect, data)
+	return err
+}

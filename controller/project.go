@@ -69,3 +69,20 @@ func DeleteProject(c *gin.Context) {
 	}
 	c.JSON(200, gin.H{"message": "删除成功"})
 }
+
+func UpdateProject(c *gin.Context) {
+	var data dto.UpdateProjectReq
+	err := c.ShouldBindJSON(&data)
+	if err != nil {
+		fmt.Println(err.Error())
+		c.JSON(400, gin.H{"message": "入参错误"})
+		return
+	}
+	err = server.UpdateProject(c, data)
+	if err != nil {
+		fmt.Println(err.Error())
+		c.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+	c.JSON(200, gin.H{"message": "编辑成功"})
+}
