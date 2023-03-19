@@ -63,7 +63,7 @@ func StaticConfig(r *gin.Engine) {
 
 	static := r.Group("/static")
 
-	static.StaticFile("/resume", "static/.resume.pdf")
+	static.StaticFile("/resume", "static/resume.pdf")
 
 	static.StaticFile("/express", "static/express.zip")
 
